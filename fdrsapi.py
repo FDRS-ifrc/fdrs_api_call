@@ -6,8 +6,8 @@ import json
 
 
 #function baseline
-def baseline(years_selected):
-    code = requests.get("https://data-api.ifrc.org/api/entities/ns/?apiKey=21e401ae-6b35-404b-a72a-b74cce66dee3").json()
+def baseline(years_selected,api_key):
+    code = requests.get(f"https://data-api.ifrc.org/api/entities/ns/?apiKey={api_key}").json()
     df_code = json_normalize(data=code)
     df_code=df_code[["KPI_DON_code","NSO_DON_name","NSO_ZON_name","iso_3"]]
     df_baseline=pd.DataFrame()
@@ -23,8 +23,8 @@ def baseline(years_selected):
 
 
 #api_function
-def api_function(years,kpi_code,kpi_float):
-    df_baseline=baseline(years)
+def api_function(years,kpi_code,kpi_float,api_key):
+    df_baseline=baseline(years,api_key)
     df_temp = pd.DataFrame()
     df = pd.DataFrame()
     df_final=pd.DataFrame()
@@ -32,7 +32,7 @@ def api_function(years,kpi_code,kpi_float):
     for kpi_codes in kpi_code:
     # df_final.merge(df_baseline[["KPI ID","value"]],on=["KPI ID"],how="outer")
         for year in years:
-            results = requests.get(f"https://data-api.ifrc.org/api/KpiValue?kpicode={kpi_codes}&year={year}&apiKey=21e401ae-6b35-404b-a72a-b74cce66dee3").json()
+            results = requests.get(f"https://data-api.ifrc.org/api/KpiValue?kpicode={kpi_codes}&year={year}&apiKey={api_key}").json()
             df_temp = json_normalize(data=results)
             df_temp["KPI_Year"] = year
             df_temp["KPI_Code"]=kpi_codes
