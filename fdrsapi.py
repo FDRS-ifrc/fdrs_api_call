@@ -6,8 +6,8 @@ import json
 
 
 #function baseline
-def baseline(years_selected,api_key):
-    code = requests.get(f"https://data-api.ifrc.org/api/entities/ns/?apiKey={api_key}").json()
+def baseline(years_selected,key):
+    code = requests.get(f"https://data-api.ifrc.org/api/entities/ns/?apiKey={key}").json()
     df_code = json_normalize(data=code)
     df_code=df_code[["KPI_DON_code","NSO_DON_name","NSO_ZON_name","iso_3"]]
     df_baseline=pd.DataFrame()
